@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.Ryan</groupId>
-    <artifactId>configuration</artifactId>
+    <artifactId>documentapi</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>configuration</name>
+    <name>documentapi</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -42,6 +42,27 @@
             <version>7.6.2</version>
         </dependency>
 
+        <!--juint依赖-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+
+        <!-- lombok依赖 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- log4j依赖 -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
     </dependencies>
 
     <build>
