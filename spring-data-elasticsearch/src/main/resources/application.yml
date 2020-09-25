@@ -1,0 +1,6 @@
+spring:
+  data:
+    # Elasticsearch ≈‰÷√œÓ
+    elasticsearch:
+      cluster-name: elasticsearch
+      cluster-nodes: 47.112.240.174:9200

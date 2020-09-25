@@ -9,8 +9,7 @@ import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
-import org.elasticsearch.action.get.GetRequest;
-import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.get.*;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.support.WriteRequest;
 import org.elasticsearch.action.support.replication.ReplicationResponse;
@@ -28,9 +27,11 @@ import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.VersionType;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryAction;
 import org.elasticsearch.index.reindex.DeleteByQueryRequestBuilder;
+import org.elasticsearch.index.reindex.ReindexRequest;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
@@ -43,6 +44,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static java.util.Collections.singletonMap;
+import static junit.framework.TestCase.assertNull;
 
 @Slf4j
 @SpringBootTest
@@ -392,34 +394,166 @@ class DocumentapiApplicationTests {
         /**
          * Bulk API 批量插入
          */
-        BulkResponse response = null;
-        try {
-            ArrayList<Student> list = new ArrayList<>();
-            BulkRequest request = new BulkRequest();
-            list.forEach(item -> request.add(new IndexRequest("test")
-                    .source(JSONObject.toJSONString(item), XContentType.JSON)));
-            //同步执行
-            response = client.bulk(request, RequestOptions.DEFAULT);
+//        BulkResponse response = null;
+//        try {
+//            ArrayList<Student> list = new ArrayList<>();
+//            BulkRequest request = new BulkRequest();
+//            list.forEach(item -> request.add(new IndexRequest("test")
+//                    .source(JSONObject.toJSONString(item), XContentType.JSON)));
+//            //同步执行
+//            response = client.bulk(request, RequestOptions.DEFAULT);
+//
+//            //异步执行
+//            ActionListener<BulkResponse> listener = new ActionListener<BulkResponse>() {
+//                @Override
+//                public void onResponse(BulkResponse bulkResponse) {
+//                }
+//
+//                @Override
+//                public void onFailure(Exception e) {
+//                }
+//            };
+//            client.bulkAsync(request, RequestOptions.DEFAULT, listener);
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        if (response.hasFailures()) {
+//            throw new RuntimeException(response.buildFailureMessage());
+//        }
 
-            //异步执行
-            ActionListener<BulkResponse> listener = new ActionListener<BulkResponse>() {
-                @Override
-                public void onResponse(BulkResponse bulkResponse) {
-                }
 
-                @Override
-                public void onFailure(Exception e) {
-                }
-            };
-            client.bulkAsync(request, RequestOptions.DEFAULT, listener);
+        /**
+         * Mutil-Get API（multiGet API在单个http请求中并行执行多个get请求。按照一定的顺序进行获取内容的）
+         */
+
+        //一个MultiGetRequest内置为空，您添加`MultiGetRequest.Item`s来配置要获取的内容
+//        MultiGetRequest request = new MultiGetRequest();
+//        request.add(new MultiGetRequest.Item(
+//                "test",
+//                "MFigZ3QBMoi3obtijnUj"));   //姓名10
+//        request.add(new MultiGetRequest.Item("test", "N1igZ3QBMoi3obtijnUj")); //姓名17
+//
+//
+//        //可选参数
+//        //不返回source部分的结果
+//        request.add(new MultiGetRequest.Item("test", "OligZ3QBMoi3obtijnUj")   //姓名20
+//                .fetchSourceContext(FetchSourceContext.DO_NOT_FETCH_SOURCE));
+//
+//        //只返回name和school字段
+//        String[] includes = new String[]{"name", "school"};
+//        String[] excludes = Strings.EMPTY_ARRAY;
+//        FetchSourceContext fetchSourceContext =
+//                new FetchSourceContext(true, includes, excludes);
+//        request.add(new MultiGetRequest.Item("test", "RVigZ3QBMoi3obtijnUj")   //姓名31
+//                .fetchSourceContext(fetchSourceContext));
+
+        //返回特定字段的值
+//        try {
+//            //配置特定存储字段的检索（需要将字段分别存储在映射中）
+//            request.add(new MultiGetRequest.Item("test",
+//                    "RligZ3QBMoi3obtijnUj")                            //姓名32
+//                    .storedFields("name", "sid", "school"));
+//            MultiGetResponse response = null;
+//            response = client.mget(request, RequestOptions.DEFAULT);
+//            MultiGetItemResponse item = response.getResponses()[0];
+//            String value = item.getResponse().getField("name").getValue();
+//            log.info("配置特定存储字段的值为：" + value);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//        try {
+//            MultiGetResponse mget = client.mget(request, RequestOptions.DEFAULT);
+//            MultiGetItemResponse[] responses = mget.getResponses();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (response.hasFailures()) {
-            throw new RuntimeException(response.buildFailureMessage());
-        }
+        //其他设置
+//        request.add(new MultiGetRequest.Item("test", "RVigZ3QBMoi3obtijnUj")  //姓名31
+//                .routing("some_routing"));
+//        request.add(new MultiGetRequest.Item("test", "RligZ3QBMoi3obtijnUj")  //姓名32
+//                .versionType(VersionType.EXTERNAL)
+//                .version(10123L));
+//        request.preference("some_preference");
+//        request.realtime(false);
+//        request.refresh(true);
+//
+//        MultiGetResponse response = null;
+//        try {
+//            response = client.mget(request, RequestOptions.DEFAULT);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//        //异步请求
+////        ActionListener<MultiGetResponse> listener = new ActionListener<MultiGetResponse>() {
+////            @Override
+////            public void onResponse(MultiGetResponse multiGetItemResponses) {
+////
+////            }
+////
+////            @Override
+////            public void onFailure(Exception e) {
+////
+////            }
+////        };
+////
+////        client.mgetAsync(request, RequestOptions.DEFAULT, listener);
+//
+//
+//        //请求结果处理
+//        MultiGetItemResponse firstItem = response.getResponses()[3];
+//        assertNull(firstItem.getFailure());
+//        GetResponse firstGet = firstItem.getResponse();
+//        String index = firstItem.getIndex();
+//        String id = firstItem.getId();
+//        if (firstGet.isExists()) {
+//            long version = firstGet.getVersion();
+//            String sourceAsString = firstGet.getSourceAsString();
+//            Map<String, Object> sourceAsMap = firstGet.getSourceAsMap();
+//            byte[] sourceAsBytes = firstGet.getSourceAsBytes();
+//            log.info(new String(sourceAsBytes));
+//        } else {
+//
+//        }
+
+
+        /**
+         * Reindex API (ReindexRequest可用于将文档从一个或多个索引复制到目标索引)
+         *
+         */
+
+        //它要求在请求之前可能存在或可能不存在的现有源索引和目标索引,Reindex不会尝试设置目标索引。它不会复制源索引的设置。您应在运行_reindex操作之前设置目标索引，包括设置映射，分片计数，副本等
+        ReindexRequest request = new ReindexRequest();
+        request.setSourceIndices("test");
+        request.setDestIndex("dest");
+
+        //可以像索引API一样配置dest元素，以控制乐观并发控制,只留下versionType（如上所述）或将其设置为internal会导致Elasticsearch盲目地将文档转储到目标中
+        request.setDestVersionType(VersionType.EXTERNAL);
+
+        //将opType设置为create将导致_reindex仅在目标索引中创建丢失的文档。所有现有文档都将导致版本冲突。默认的opType是index。
+        request.setDestOpType("create");
+
+        //默认情况下，版本冲突会中止_reindex进程，但是您可以使用以下方法将其计数
+        request.setConflicts("proceed");
+
+        //您可以通过添加查询来限制文档,仅复制将字段用户设置为kimchy的文档
+        request.setSourceQuery(new TermQueryBuilder("user", "kimchy"));
+
+        //也可以通过设置maxDocs来限制已处理文档的数量
+        request.setSourceBatchSize(10);
+
+
+
+
+
 
 
     }
