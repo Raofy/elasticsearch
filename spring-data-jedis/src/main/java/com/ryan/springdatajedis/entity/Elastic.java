@@ -1,4 +1,4 @@
-package com.ryan.springdataelasticsearch.entity;
+package com.ryan.springdatajedis.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

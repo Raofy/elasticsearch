@@ -1,0 +1,6 @@
+
+spring:
+  data:
+    # Jest ÅäÖÃÏî
+    jest:
+      uri: http://127.0.0.1:9200

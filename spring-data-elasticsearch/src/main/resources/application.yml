@@ -1,6 +1,6 @@
 spring:
   data:
-    # Elasticsearch ÅäÖÃÏî
+    # Elasticsearch é…ç½®
     elasticsearch:
       cluster-name: elasticsearch
-      cluster-nodes: 47.112.240.174:9200
+      cluster-nodes: 127.0.0.1:9200
