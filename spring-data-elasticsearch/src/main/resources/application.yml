@@ -3,4 +3,4 @@ spring:
     # Elasticsearch 配置
     elasticsearch:
       cluster-name: elasticsearch
-      cluster-nodes: 127.0.0.1:9200
+      cluster-nodes: 175.24.16.47:9200

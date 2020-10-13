@@ -1,5 +1,5 @@
 
 elasticsearch:
-  hostname: 175.24.16.47
+  hostname: 192.168.9.173
   port: 9200
   schema: http

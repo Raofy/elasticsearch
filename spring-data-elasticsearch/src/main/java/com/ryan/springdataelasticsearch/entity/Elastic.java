@@ -17,6 +17,9 @@ public class Elastic {
     @Id
     private Integer id;
 
+    @Field(type = FieldType.Byte)
+    private Integer cid;
+
     @Field(type = FieldType.Text)
     private String name;
 
